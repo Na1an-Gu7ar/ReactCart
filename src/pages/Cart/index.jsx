@@ -24,7 +24,7 @@ const index = () => {
     return (
         <div className='flex flex-col items-center mt-10'>
             Total: {total}
-            <div className='flex flex-row gap-10 flex-wrap mt-5'>
+            <div className='flex flex-row justify-center gap-10 flex-wrap mt-5'>
                 {
                     cart && cart.length > 0 ? (cart.map((c) => {
                         // cart.count(cart.some((p) => p.id === c.id))
