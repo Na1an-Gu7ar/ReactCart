@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, removeFromCart } from '../../store/cart-slice/cart-slice'
+import { addToCart, decreaseItemQuantity, increaseItemQuantity, removeFromCart } from '../../store/cart-slice/cart-slice'
 import { Link } from 'react-router-dom'
 
 const index = () => {
@@ -10,7 +10,7 @@ const index = () => {
     const { cart } = useSelector((state) => state)
 
     useEffect(() => {
-        setTotal(cart.reduce((acc, curr) => acc + Math.round(curr.price) * 80, 0))
+        setTotal(cart.reduce((acc, curr) => acc + Math.round(curr.price) * 80*(curr.quantity), 0))
     }, [cart])
 
     const handleAddToCart = (prd) => {
@@ -21,13 +21,20 @@ const index = () => {
         dispatch(removeFromCart(prd))
     }
 
+    const increaseQuantity = (prd) => {
+        dispatch(increaseItemQuantity(prd))
+    }
+
+    const decreaseQuantity = (prd) => {
+        dispatch(decreaseItemQuantity(prd))
+    }
+
     return (
         <div className='flex flex-col items-center mt-10'>
             Total: {total}
-            <div className='flex flex-row justify-center gap-10 flex-wrap mt-5'>
+            <div className='flex flex-row justify-center gap-1 flex-wrap mt-5'>
                 {
                     cart && cart.length > 0 ? (cart.map((c) => {
-                        // cart.count(cart.some((p) => p.id === c.id))
                         return (
                             <div className='text-center border-2 border-red-400 rounded-md w-64 h-72'>
                                 <div className='w-full flex flex-col items-center'><img className='h-48' src={c?.image} alt={c?.title} /></div>
@@ -38,6 +45,9 @@ const index = () => {
                                             cart.some((p) => p.id === c.id) ? 'Remove from cart' : 'Add to cart'
                                         }
                                     </button>
+                                    <button onClick={() => increaseQuantity(c)} className='bg-yellow-300 p-1 rounded-md'>+</button>
+                                    {c.quantity}
+                                    <button onClick={() => decreaseQuantity(c)} className='bg-yellow-300 p-1 rounded-md'>-</button>
                                 </div>
                             </div>
                         )
